@@ -20,9 +20,11 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        {tweets.map(tweet => (  
-           <Tweet key={tweet.id} tweet={tweet} className='my-5 py-5 border bg-white text-dark'/>
-        ))}
+        <div>
+            {tweets.map(tweet => (  
+                <Tweet key={tweet.id} tweet={tweet} className='my-5 py-5 border bg-white text-dark'/>
+            ))}
+        </div>
       </header>
     </div>
   );
