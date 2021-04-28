@@ -1,10 +1,12 @@
 import React from 'react';
 
-const Form = () => {
+const Form = ({ handleChange, className, ...props}) => {
     return (
-        <div>
-            
-        </div>
+       <textarea 
+            className={className} 
+            onChange={handleChange} 
+            {...props} 
+        />
     );
 }
 
