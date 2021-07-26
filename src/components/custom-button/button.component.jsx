@@ -19,12 +19,12 @@ const Button = ({tweet, action, ...otherProps}) => {
     }
 
     return (
-    <button 
-        className={className} 
-        onClick={otherProps.handleClick ? otherProps.handleClick : handleClick}
-    > 
-        {tweetLikes} {action} 
-    </button>
+        <button 
+            className={className} 
+            onClick={otherProps.handleClick ? otherProps.handleClick : handleClick}
+        > 
+            {tweetLikes} {action} 
+        </button>
     );    
 }
 

@@ -4,7 +4,6 @@ import Button from '../custom-button/button.component';
 const Tweet = ({ tweet, ...otherProps  }) => {
     const className = otherProps.className ? otherProps.className : 'col-10 mx-auto col-md-6';
 
-
     return (
         <div className={className}>
             <p>{tweet.id} - {tweet.content}</p>

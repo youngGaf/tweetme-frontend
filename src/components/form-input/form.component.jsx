@@ -5,7 +5,8 @@ const Form = ({ handleChange, className, ...props}) => {
        <textarea 
             className={className} 
             onChange={handleChange} 
-            {...props} 
+            {...props}
+            required
         />
     );
 }

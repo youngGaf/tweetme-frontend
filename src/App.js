@@ -2,13 +2,16 @@ import { useEffect, useState } from 'react';
 import Tweet from './components/tweet-section/tweet.component';
 import Form from './components/form-input/form.component'
 import Button from './components/custom-button/button.component';
+import Header from './components/navbar/navbar.component';
+import { apiRequest, getCsrfToken }from './components/tweet-requests/tweet-requests';
 
-import logo from './logo.svg';
+
 import './App.css';
 
 function App() {
   const [tweets, setTweets] = useState([]);
   const [tweetPost, setTweetPost] = useState('');
+  
 
   useEffect(() =>{
     fetch('/api/tweets')
@@ -19,28 +22,39 @@ function App() {
     })
   }, []);
 
-  const handleChange = (e) => {
-    const { value } = e.target;
+  const handleChange = (event) => {
+    const { value } = event.target;
     setTweetPost(value);
   }
 
-  const handleSubmit = (e) => {
-    e.target.preventDefault();
-    console.log(e);
+  const handleSubmit = async(event) => {
+    event.preventDefault();
+    if (tweets){
+      const csrfToken = await getCsrfToken();
+      const postTweet = await apiRequest('create/','POST', tweetPost, csrfToken);
+      console.log(postTweet);
+      tweets.unshift({
+        content: tweetPost,
+        likes: 0,
+        id: 1010
+      });
+      console.log(csrfToken);
+    }
+    setTweetPost('');
   }
 
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <Header />
+  
 
         {/* Post tweets */}
-        <div>
+        <div className='col-12 col-md-10 my-4 mx-auto border rounded py-3 mb-4 tweet'>
           <div className='col-12 mb-3'>
             <form onSubmit={handleSubmit}>
               <Form
                 className='form-control'
-                name='tweet'
+                name='content'
                 value={tweetPost}
                 handleChange={handleChange}
                 placeholder='Tweet'
@@ -50,9 +64,9 @@ function App() {
             </form>
           </div>
         </div>
-        
+
         {/* Loaded tweets */}
-        <div>
+        <div className='col-12 col-md-10 mx-auto rounded py-3 mb-4'>
             {tweets.map(tweet => (  
                 <Tweet 
                   key={tweet.id} 
@@ -61,8 +75,6 @@ function App() {
                 />
             ))}
         </div>
-
-      </header>
     </div>
   );
 }
