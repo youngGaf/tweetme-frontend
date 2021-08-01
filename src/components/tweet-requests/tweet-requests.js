@@ -12,18 +12,27 @@ export const getCsrfToken = async () => {
 export const apiRequest = async (fetchUrl, method, postData, csrfToken) => {
     try {
         const response = await fetch(`/api/tweets/${fetchUrl}`, {
-            data: postData ? postData : null,
             method: method,
             headers:(
                 method === 'POST' ? {
-                'X-CSRFToken': csrfToken 
+                'X-CSRFToken': csrfToken,
+                'Content-Type': 'application/json'
             }: {}
-            )
+            ),
+            credentials: 'include',
+            body: JSON.stringify(postData)
         });
+        
+        // Throw error on errror status
+        if(response.status !== 200 && response.status !== 201) {
+            console.log(response)
+            throw response.statusText
+        }
+
         const data = await response.json();
-        return data;
+        return data
     } catch (error) {
-        console.log(error);
         alert('An error occured!');
+        window.location.reload(false);
     }
 }

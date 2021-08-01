@@ -9,14 +9,15 @@ import { apiRequest, getCsrfToken }from './components/tweet-requests/tweet-reque
 import './App.css';
 
 function App() {
-  const [tweets, setTweets] = useState([]);
+  const [tweetLists, setTweetLists] = useState([]);
+  const [retweet, setRetweet] = useState(false);
   const [tweetPost, setTweetPost] = useState('');
-  
-
+   
   useEffect(() =>{
     fetch('/api/tweets')
     .then(response => response.json())
-    .then(data => setTweets(data))
+    .then(data => {
+      setTweetLists(data)})
     .catch((error) =>{ console.log(error)
       alert('An error occured!')
     })
@@ -29,18 +30,17 @@ function App() {
 
   const handleSubmit = async(event) => {
     event.preventDefault();
-    if (tweets){
-      const csrfToken = await getCsrfToken();
-      const postTweet = await apiRequest('create/','POST', tweetPost, csrfToken);
-      console.log(postTweet);
-      tweets.unshift({
-        content: tweetPost,
-        likes: 0,
-        id: 1010
-      });
-      console.log(csrfToken);
+    if (tweetLists){
+      const { csrfToken } = await getCsrfToken();
+      const postTweet = await apiRequest('create/','POST', {content: tweetPost}, csrfToken);
+      tweetLists.unshift(postTweet);
     }
     setTweetPost('');
+  }
+
+  const handleDidRetweet = (newTweet) => {
+    tweetLists.unshift(newTweet);
+    setRetweet(!retweet)
   }
 
   return (
@@ -67,11 +67,13 @@ function App() {
 
         {/* Loaded tweets */}
         <div className='col-12 col-md-10 mx-auto rounded py-3 mb-4'>
-            {tweets.map(tweet => (  
+            {tweetLists.map(tweet => (  
                 <Tweet 
                   key={tweet.id} 
-                  tweet={tweet} 
+                  tweet={tweet}
+                  retweet 
                   className='my-5 py-5 border bg-white text-dark'
+                  handleDidRetweet={handleDidRetweet}
                 />
             ))}
         </div>

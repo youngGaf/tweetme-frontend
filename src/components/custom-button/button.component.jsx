@@ -1,29 +1,16 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-const Button = ({tweet, action, ...otherProps}) => {
-    const [likes, setLikes] = useState(tweet ? tweet.likes : 0);
-    const [userLike, setUserLike] = useState(false);
+const Button = ({tweet, action, actionTweet, ...otherProps}) => {
+    const likes = tweet ? tweet.likes : 0;
     const className = otherProps.className ? otherProps.className : 'btn btn-primary'; 
-    const tweetLikes = action === 'likes' ? likes  : '';
-
-    const handleClick = (e) => {
-        if (e.target.innerHTML.includes('likes')){
-            if (userLike === true){
-                setLikes(likes - 1);
-                setUserLike(!userLike)
-            }else{
-                setLikes(likes + 1);
-                setUserLike(!userLike);
-            }
-        }
-    }
+    const tweetLikes = action === 'like' ? likes  : '';
 
     return (
         <button 
             className={className} 
-            onClick={otherProps.handleClick ? otherProps.handleClick : handleClick}
+            onClick={otherProps.handleClick}
         > 
-            {tweetLikes} {action} 
+            { actionTweet ?  actionTweet.likes : tweetLikes} {action} 
         </button>
     );    
 }
