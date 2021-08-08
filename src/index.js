@@ -4,9 +4,10 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+const app = document.getElementById('root');
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App userInfo={app.dataset}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
